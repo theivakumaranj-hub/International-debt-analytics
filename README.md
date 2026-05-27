@@ -25,7 +25,7 @@ An end-to-end data pipeline and interactive dashboard analyzing the World Bank's
 ### 1. Install Dependencies
 Open your terminal and run the following command to install the required libraries:
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 2. Execute the Pipeline
 (These should be run in the exact order below)
