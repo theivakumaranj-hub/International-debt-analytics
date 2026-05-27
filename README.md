@@ -2,13 +2,13 @@
 ![International Debt Dashboard Preview](Dashboard.png)
 
 ## 📌 Project Overview
-This project is an end-to-end data engineering and analytics pipeline built to process, analyze, and visualize World Bank global debt data. It transforms raw, wide-format CSV data into a fully relational PostgreSQL database and serves interactive financial insights through a dynamic Streamlit web dashboard.
+An end-to-end data pipeline and interactive dashboard analyzing the World Bank's global debt dataset. Built with Python, PostgreSQL, and Streamlit, this project seamlessly bridges data engineering, database management, and interactive visual analytics.
 
 ## 🛠️ Tech Stack
 * **Database:** PostgreSQL
 * **Data Engineering:** Python, Pandas, SQLAlchemy
 * **Data Visualization:** Streamlit, Plotly Express
-* **Analysis:** Advanced SQL (Window functions, CTEs, Aggregations)
+* **Analysis:** Analysis: Advanced PostgreSQL Queries
 
 ## 📂 Repository Structure
 * `pipeline.py`: Ingests raw data, establishes the relational database structure, and enforces Primary/Foreign Key constraints.
