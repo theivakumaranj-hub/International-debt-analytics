@@ -24,7 +24,7 @@ This project is an end-to-end data engineering and analytics pipeline built to p
 
 ### 1. Install Dependencies
 Open your terminal and run the following command to install the required libraries:
-```bash
+
 pip install -r requirements.txt
 
 2. Execute the Pipeline
@@ -32,12 +32,12 @@ pip install -r requirements.txt
 
 Step A: Build the Database Architecture
 
-python pipeline.py
+`python pipeline.py`
 
 Step B: Clean the Data
 
-python reshape.py
+`python reshape.py`
 
 Step C: Launch the Dashboard
 
-streamlit run debt_dashboard.py
+`streamlit run debt_dashboard.py`
