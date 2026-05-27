@@ -22,13 +22,22 @@ This project is an end-to-end data engineering and analytics pipeline built to p
 
 ## 🚀 Setup & Installation
 
-### 1. Clone the Repository
-Download this code and the included dataset to your local machine:
+### 1. Install Dependencies
+Open your terminal and run the following command to install the required libraries:
 ```bash
-git clone https://github.com/your-username/your-repository-name.git
-cd your-repository-name
-
 pip install -r requirements.txt
+
+2. Execute the Pipeline
+(These should be run in the exact order below)
+
+Step A: Build the Database Architecture
+
 python pipeline.py
+
+Step B: Clean the Data
+
 python reshape.py
+
+Step C: Launch the Dashboard
+
 streamlit run debt_dashboard.py
