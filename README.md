@@ -25,12 +25,10 @@ This project is an end-to-end data engineering and analytics pipeline built to p
 ### 1. Clone the Repository
 Download this code and the included dataset to your local machine:
 ```bash
-git clone [https://github.com/your-username/your-repository-name.git](https://github.com/your-username/your-repository-name.git)
+git clone https://github.com/your-username/your-repository-name.git
 cd your-repository-name
 
-`pip install -r requirements.txt`:LIbraries installation
-`python pipeline.py`
-`python reshape.py`
-`streamlit run debt_dashboard.py`
-
-
+pip install -r requirements.txt
+python pipeline.py
+python reshape.py
+streamlit run debt_dashboard.py
