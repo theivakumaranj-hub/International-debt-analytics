@@ -8,7 +8,7 @@ An end-to-end data pipeline and interactive dashboard analyzing the World Bank's
 * **Database:** PostgreSQL
 * **Data Engineering:** Python, Pandas, SQLAlchemy
 * **Data Visualization:** Streamlit, Plotly Express
-* **Analysis:** Analysis: Advanced PostgreSQL Queries
+* **Analysis:** Advanced PostgreSQL Queries
 
 ## 📂 Repository Structure
 * `pipeline.py`: Ingests raw data, establishes the relational database structure, and enforces Primary/Foreign Key constraints.
