@@ -88,7 +88,7 @@ if not df_filtered.empty:
     st.divider()
 
 # ==========================================
-# 🗂️ TABBED NAVIGATION LAYOUT (NOW 5 TABS!)
+# 🗂️ TABBED NAVIGATION LAYOUT
 # ==========================================
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📈 Global Trends", 
@@ -109,18 +109,23 @@ with tab1:
         )
         st.plotly_chart(fig_line, use_container_width=True)
 
-# --- TAB 2: Bar Chart Comparisons ---
+# --- TAB 2: Ranked Horizontal Bar Chart ---
 with tab2:
     st.subheader("Total Value Comparison by Country")
+    st.markdown("Ranked horizontal bar chart for clear categorical comparison.")
     if not df_filtered.empty:
-        agg_df = df_filtered.groupby(["Country Name", "Series Name"])["Value"].sum().reset_index()
+        # Aggregate total debt per country to rank them properly
+        agg_df = df_filtered.groupby("Country Name")["Value"].sum().reset_index()
+        
         fig_bar = px.bar(
-            agg_df, x="Country Name", y="Value", color="Series Name",
-            barmode="group", template="plotly_white"
+            agg_df, x="Value", y="Country Name", color="Value",
+            orientation='h', template="plotly_white", text_auto='.2s'
         )
+        # Sort bars largest to smallest (bottom to top in Plotly horizontal)
+        fig_bar.update_layout(yaxis={'categoryorder':'total ascending'})
         st.plotly_chart(fig_bar, use_container_width=True)
 
-# --- TAB 3: NEW! Year-over-Year Growth Velocity ---
+# --- TAB 3: Year-over-Year Growth Velocity (Line Chart) ---
 with tab3:
     st.subheader("Year-over-Year (YoY) Growth Percentage")
     st.markdown("Analyzes how rapidly a country's debt is increasing or decreasing compared to the previous year.")
@@ -130,48 +135,54 @@ with tab3:
         yoy_df = yoy_df.sort_values(['Country Name', 'Year'])
         yoy_df['YoY Growth (%)'] = yoy_df.groupby('Country Name')['Value'].pct_change() * 100
         
-        # Plot the growth
-        fig_yoy = px.bar(
+        # Plot as a line chart (best practice for trends over time)
+        fig_yoy = px.line(
             yoy_df, x="Year", y="YoY Growth (%)", color="Country Name",
-            barmode="group", template="plotly_white",
+            template="plotly_white", markers=True,
             color_discrete_sequence=px.colors.qualitative.Set2
         )
         # Add a baseline at 0%
-        fig_yoy.add_hline(y=0, line_width=2, line_color="black")
+        fig_yoy.add_hline(y=0, line_width=2, line_color="black", line_dash="dash")
+        fig_yoy.update_xaxes(type='category') # Forces x-axis to treat years evenly
         st.plotly_chart(fig_yoy, use_container_width=True)
 
-# --- TAB 4: NEW! Debt Composition Sunburst ---
+# --- TAB 4: Debt Portfolio Composition (Pie Chart) ---
 with tab4:
     st.subheader("Debt Portfolio Composition")
-    st.markdown("Interactive breakdown of how the total debt is distributed across different economic indicators.")
+    st.markdown("Proportional breakdown of debt across selected countries and indicators.")
+    
     if not df_filtered.empty:
-        # Aggregate for composition
+        # Aggregate by BOTH Country and Indicator to keep all granular details
         comp_df = df_filtered.groupby(['Country Name', 'Series Name'])['Value'].sum().reset_index()
         
-        fig_sunburst = px.sunburst(
+        # Clever Fix: Create a combined label column so the Pie Chart can show both!
+        comp_df['Detailed Category'] = comp_df['Country Name'] + " - " + comp_df['Series Name']
+        
+        # Build the Pie Chart using our new highly-detailed column
+        fig_pie = px.pie(
             comp_df, 
-            path=['Country Name', 'Series Name'], 
+            names='Detailed Category', 
             values='Value',
             template="plotly_white",
             color_discrete_sequence=px.colors.qualitative.Pastel
         )
         
-       # 1. Allow text to shrink to fit all slices
-        fig_sunburst.update_layout(
-            height=550, 
+        # Optimize layout (Hiding the legend here keeps the dashboard looking clean)
+        fig_pie.update_layout(
+            height=650, 
             margin=dict(t=30, l=10, r=10, b=10),
-            uniformtext=dict(minsize=8, mode=False) # <-- Changed this line!
+            showlegend=False 
         )
         
-        # 2. Auto-orient the text and force a larger base font size
-        fig_sunburst.update_traces(
-            textinfo="label+percent parent",
-            textfont=dict(size=18, color="black"),  # <-- Added size=18 right here!
-            insidetextorientation='auto',
-            hovertemplate="<b>%{label}</b><br>Debt Value: $%{value:,.0f}<br>Share of Parent: %{percentParent:.1%}<extra></extra>"
+        # Add clean, readable data labels and dynamic hover text
+        fig_pie.update_traces(
+            textposition='inside',
+            textinfo='percent+label',
+            textfont=dict(size=12, color="black"),
+            hovertemplate="<b>%{label}</b><br>Debt Value: $%{value:,.0f}<br>Share: %{percent:.1%}<extra></extra>"
         )
         
-        st.plotly_chart(fig_sunburst, use_container_width=True)
+        st.plotly_chart(fig_pie, use_container_width=True)
 
 # --- TAB 5: Raw Data Grid & Export ---
 with tab5:
