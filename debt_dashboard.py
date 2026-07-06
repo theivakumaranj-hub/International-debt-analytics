@@ -1,4 +1,4 @@
-import sys  # Injects sys into the global runtime namespace to patch library bugs
+import sys  
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -16,7 +16,7 @@ def init_connection():
     connection_url = URL.create(
         drivername="postgresql+psycopg2",
         username="postgres",
-        password="kumaranias7",  # <-- TYPE YOUR REAL PGADMIN PASSWORD HERE
+        password="kumaranias7",  
         host="localhost",
         port=5432,
         database="international_debt_db"
@@ -53,7 +53,7 @@ with st.spinner("Connecting to PostgreSQL & loading data..."):
 st.sidebar.header("⚙️ Filter Analytics")
 st.sidebar.markdown("Adjust these parameters to update all tabs dynamically.")
 
-# 1. Country Filter Setup (Checkbox removed, falls back cleanly to first 5 items)
+# 1. Country Filter Setup
 all_countries = sorted(df["Country Name"].unique())
 valid_defaults = all_countries[:5] if len(all_countries) >= 5 else all_countries
 
