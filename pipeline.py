@@ -36,7 +36,7 @@ def clean_dataframe(df):
         df[col] = df[col].astype(str).str.strip()
     return df
 
-# 3. Upload Country Metadata [cite: 49]
+# 3. Upload Country Metadata
 try:
     df_country = pd.read_csv("IDS_CountryMetaData.csv")
     df_country = clean_dataframe(df_country).dropna(subset=['Country Code']).drop_duplicates()
@@ -45,7 +45,7 @@ try:
 except Exception as e:
     print(f"Error processing Country Metadata: {e}")
 
-# 4. Upload Series Metadata [cite: 49]
+# 4. Upload Series Metadata
 try:
     df_series = pd.read_csv("IDS_SeriesMetaData.csv")
     df_series = clean_dataframe(df_series).dropna(subset=['Series Code']).drop_duplicates()
@@ -54,13 +54,13 @@ try:
 except Exception as e:
     print(f"Error processing Series Metadata: {e}")
 
-# 5. Upload Main Debt Data [cite: 49]
+# 5. Upload Main Debt Data 
 try:
     df_main = pd.read_csv("IDS_ALLCountries_Data.csv")
     df_main = clean_dataframe(df_main)
     df_main = df_main.dropna(subset=['Country Code', 'Counterpart Area Code', 'Series Code']).drop_duplicates()
     
-    # Ensure value column is numeric [cite: 35]
+    # Ensure value column is numeric
     if 'Value' in df_main.columns:
         df_main['Value'] = pd.to_numeric(df_main['Value'], errors='coerce')
         
@@ -69,16 +69,16 @@ try:
 except Exception as e:
     print(f"Error processing Main Debt Data: {e}")
 
-# 6. Apply Constraints (Primary and Foreign Keys) [cite: 53]
+# 6. Apply Constraints (Primary and Foreign Keys)
 print("\n--- Applying Keys and Relationships ---")
 with engine.connect() as conn:
     try:
         conn.execute(text("COMMIT;"))
-        # Primary Keys [cite: 53]
+        # Primary Keys
         conn.execute(text('ALTER TABLE countries_metadata ADD PRIMARY KEY ("Country Code");'))
         conn.execute(text('ALTER TABLE indicators_metadata ADD PRIMARY KEY ("Series Code");'))
         
-        # Foreign Keys [cite: 53]
+        # Foreign Keys 
         conn.execute(text('''
             ALTER TABLE debt_data 
             ADD CONSTRAINT fk_country 
